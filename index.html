@@ -94,6 +94,24 @@
         .modal-content button:hover {
             background-color: #ff6347; /* ホバー時の色変更 */
         }
+        /* サウンドオンオフボタンのスタイル */
+        #sound-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000; /* 他の要素より前面に表示 */
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        #sound-toggle:hover {
+            background-color: #0056b3; /* ホバー時の色変更 */
+        }
     </style>
 </head>
 <body>
@@ -101,6 +119,7 @@
     <div id="score">Score: 0</div>
     <div id="time">Time: 15</div>
     <div id="target"></div>
+    <button id="sound-toggle">Sound: On</button> <!-- サウンドオンオフボタン -->
 
     <!-- モーダルのHTML -->
     <div id="game-over-modal" class="modal">
@@ -120,15 +139,18 @@
             const modal = document.getElementById('game-over-modal');
             const closeModalButton = document.getElementById('close-modal');
             const modalMessage = document.getElementById('modal-message');
+            const soundToggle = document.getElementById('sound-toggle');
 
-            const backgrounds = ['haikei1.gif', 'haikei2.gif', 'haikei3.gif'];
+            const backgrounds = ['haikei1.jpg', 'haikei2.jpg', 'haikei3.jpg'];
             let score = 0;
             let timeLeft = 15;
             let gameInterval;
             let maxX, maxY;
+            let soundOn = true; // 初期状態はサウンドオン
 
             startButton.addEventListener('click', startGame);
             window.addEventListener('resize', updateTargetArea); // 画面サイズ変更時に再計算
+            soundToggle.addEventListener('click', toggleSound); // サウンドオンオフボタンにイベントを追加
 
             function startGame() {
                 score = 0;
@@ -175,7 +197,7 @@
             function handleClick() {
                 score++;
                 scoreDisplay.textContent = `Score: ${score}`;
-                audio.play();
+                if (soundOn) audio.play(); // サウンドがオンのときだけ再生
                 showTarget();
             }
 
@@ -194,6 +216,11 @@
             closeModalButton.addEventListener('click', () => {
                 modal.style.display = 'none'; // モーダルを非表示
             });
+
+            function toggleSound() {
+                soundOn = !soundOn; // サウンドの状態をトグル
+                soundToggle.textContent = `Sound: ${soundOn ? 'On' : 'Off'}`; // ボタンのテキストを更新
+            }
         });
     </script>
 </body>
